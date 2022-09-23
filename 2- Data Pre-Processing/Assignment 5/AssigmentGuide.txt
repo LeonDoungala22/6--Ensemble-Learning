@@ -1,0 +1,169 @@
+Data Pre-Processing: assignment #5 - How to preprocess numerical and categorical variables together?
+***************************************************************************************************
+
+
+Durante questa quinta settimana di corso di Data Science, andremo a approfondire come applicare diverse tecniche di data pre-processing su variabili numeriche e categoriche.
+E’ lo stesso obiettivo della scorsa settimana (e in parte anche della terza settimana), però questo step è molto importante capirlo in fondo e saperlo applicare in concreto tramite codice.
+
+ 
+
+/* OBIETTIVO */
+
+L’obiettivo di questo assignment è quello di definire una pipeline di pre-processing che, partendo da un dataset contenente sia variabili numeriche che categoriche:
+
+- Applichi una o più tecniche di data pre-processing sulle sole variabili numeriche, e.g. PowerTransformer seguito da StandardScaler
+- Applichi una tecnica di data pre-processing sulle sole variabili categoriche, e.g. OneHotEncoder
+- Applichi una tecnica di data pre-processing sulle sole variabili booleane (da interpretare come categoriche), e.g. OneHotEncoder
+
+- Unisca i tre dataset pre-processati, il primo contenente solo le variabili numeriche, il secondo contenente solo le variabili categoriche ed il terzo contenente solo le variabili booleane (puoi unire il secondo e il terzo dataset se applichi la stessa tecnica alle variabili categoriche e booleane)
+- Usi l’algoritmo DecisionTreeClassifier per classificare le righe del dataset (al momento, non ci interessano le performance del modello, ma tutto ciò che viene prima del modello = data pre-processing)
+ 
+
+NB: ovviamente, puoi partire dai due notebook che abbiamo sviluppato insieme venerdì scorso e estenderlo complicandolo a piacere (in allegato trovi i due Jupyter Notebook).
+
+Usare quei due notebook ti consente di partire già avvantaggiato, però se preferisci rifare da zero non ci sono problemi.
+
+ 
+
+Punti extra:
+***********
+
+Strutturare il codice a metodi. In particolare, abbiamo deciso insieme che dovrai scrivere un metodo chiamato e.g. “apply_data_preprocessing” che:
+
+- Prende in input un pandas DataFrame raw, quindi una versione che contiene ciò che leggi dal metodo read_csv()
+- Applica N step di pre-processing
+- Restituisce in output un pandas DataFrame, che contiene la versione pre-processata da dare in input al classificatore
+
+NB: ricordati che questo metodo deve avere un parametro booleano chiamato e.g. “is_training” che è:
+
+- True se stiamo applicando il pre-processing al dataset di training (offline)
+- False se stiamo applicando il pre-processing al dataset di test (online)
+
+NB: ricordati di fare lo split del dataset che trovi su Kaggle in training set e test set prima di applicare questo metodo
+
+Rendere più parametrico possibile il metodo di data pre-processing del punto precedente, e.g. cambiando solo un parametro del metodo che indica e.g. quale Scaler applicare sulle variabili numeriche, tutto il resto del codice continua a funzionare come atteso
+ 
+
+Per quanto riguarda il primo punto, eccoti qui uno pseudo-codice del metodo che dovrai implementare:
+
+
+/*
+
+def apply_preprocessing(raw_df, is_training=False):
+
+    # common pre-processing steps
+
+    if is_training:
+
+        # scaler, encoder, transform
+
+       
+
+        # 1) fit
+
+        # 2) tranform
+
+        # 3) save
+
+       
+
+    else:
+
+        # scaler, encoder, transform
+
+        # 1) load
+
+        # 2) transform
+
+   
+
+    return pp_df
+
+*/
+
+ 
+
+/* DATASET */
+
+
+Il dataset che andremo ad utilizzare in questa lezione è stato preso da Kaggle.
+
+Questo dataset contiene dati relativi a campagne di marketing dirette (chiamate telefoniche) di un istituto bancario portoghese.
+
+- L’obiettivo (dal punto di vista di classificazione) è quello di predirre se un cliente sottoscriverà un deposito a termine.
+
+Questo dataset contiene 21 colonne in totale, di cui:
+
+    * 9 numeriche
+    * 10 categoriche
+    * 1 variabile target binaria
+    
+NB: come scritto nella pagina di Kaggle, non usare la colonna “Duration” perché:
+
+“
+Duration: last contact duration, in seconds (numeric). Important
+note: this attribute highly affects the output target (e.g., if
+duration=0 then y='no'). Yet, the duration is not known before a call
+is performed. Also, after the end of the call y is obviously known.
+Thus, this input should only be included for benchmark purposes and
+should be discarded if the intention is to have a realistic
+predictive model.
+
+”
+
+ 
+
+/* CONTESTO TEORICO */
+
+
+In ottica di utilizzare o implementare un algoritmo di Machine Learning, è necessario prima di tutto ottenere un dataset dal quale è possibile estrarre del valore.
+
+Una volta ottenuto il dataset, è necessario capire i tipi di variabili che contengono il dataset (bisogna effettuare dei cast, eventualmente ma tipicamente è cosi).
+
+ 
+
+A partire da questo dataset è possibile estrarre/generare nuove feature, come per esempio:
+
+- Da una colonna che contiene delle date, è possibile calcolare il giorno, il mese, l’anno, il giorno della settimana, etc. (pandas offre tutto ciò in modo semplice - documentazione)
+- Da più colonne che contengono dei valori numerici, è possibile calcolare differenze, etc. (ovviamente deve avere un senso l’operazione che si fa tra due o più colonne)
+etc.
+ 
+
+Una volta che sono state generate o estratte una lista di nuove feature, oltre alle colonne già presenti nel dataset, è necessario applicare una tecnica di feature selection che ha l’obiettivo di selezionare il sotto-insieme di feature ottimale che permette di massimizzare le performance del modello di ML. Questo step non è semplice, in quanto esistono tantissime combinazioni diverse di feature che bisognerebbe provare affinché si riuscisse a stabilire quale è esattamente il set ottimale di feature.
+
+NB: Questo argomento verrà approfondito tra qualche settimana. Per il momento, non focalizziamoci su questo step di selezione delle feature ottimali.
+
+ 
+
+Una volta che hai selezionato le variabili del tuo dataset che vuoi usare come feature per allenare un tuo modello, è necessario (tipicamente, ma non sempre – dipende dall’algoritmo che si andrà ad usare) applicare una pipeline (= lista di step ordinata) di data pre-processing. Il tipo di pre-processing che bisogna andare a applicare sul dataset dipende da diversi fattori, come:
+
+Tipologia di dato per ogni colonna, e.g. se è numerica, categorica, data, tempo, etc.
+Tipologia di algoritmo di ML che si andrà ad applicare
+ 
+
+/* TECNOLOGIA */
+
+ 
+
+Per quanto riguarda le variabili numeriche, esistono in scikit-learn diverse tecniche già implementate.
+
+Esistono diverse tecniche, chiamati Scaler, che hanno come obiettivo quello di scalare/normalizzare le variabili numeriche in un intervallo, a seconda dello Scaler applicato. Ne esistono alcuni semplici fino a soluzioni più complesse o dedicate a casi particolari. In questa lezione andremo a vedere le principali:
+
+- MinMaxScaler, che consente di scalare ciasuna variabile numerica in un intervallo specificato dall’utente
+- StandardScaler, che consente di scalare ciascuna variabile numerica rimuovendo la media e scalando la varianza a 1
+- MaxAbsScaler, che consente di scalare ciascuna variabile numerica dal massimo valore contenuto in quella colonna
+- RobustScaler, che consente di scalare ciascuna variabile numerica usando statistiche che sono robuste agli outlier
+
+Oltre a queste tecniche di base, ne esistono diverse più complesse chiamate Transformer:
+
+- QuantileTransformer, che trasforma le feature numeriche usando informazioni sui quantili
+- PowerTransformer, che trasforma le feature numeriche rendendole più Gaussian-like
+- Binarizer, che consente di binarizzare i dati in 0 e 1 applicando una soglia
+- PolynomialFeatures, che consente di creare feature di interazione polinomiali, a partire dalle variabili numeriche in input
+ 
+
+Per quanto riguarda le variabili categoriche, esistono in scikit-learn diverse tecniche già implementate. In questa lezione andremo a vedere le principali:
+
+- OneHotEncoder, che consente di convertire i valori di tipo stringa in valori numerici creando N colonne aggiuntive
+- OrdinalEncoder, che consente di convertire i valori di tipo stringa in valori numerici senza introdurre colonne aggiuntive
+ 

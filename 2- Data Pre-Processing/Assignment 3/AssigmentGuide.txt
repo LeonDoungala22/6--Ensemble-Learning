@@ -1,0 +1,66 @@
+ASSIGMENT GUIDE :  Pre-Processing- How to preprocess numerical variables?
+***************
+
+
+Durante questa terza settimana di corso di Data Science, andremo a studiare le diverse TECNICHE DI DATA PRE-PROCESSING SU VARIABILI NUMERICHE .
+
+
+In ottica di utilizzare o implementare un algoritmo di Machine Learning, 
+
+
+- E' necessario prima di tutto ottenere un dataset dal quale è possiibile estrarre del valore.
+- Una volta ottenuto il dataset, è necessario capire i tipi di variabili che contengono il dataset (bisogna effettuare dei cast, eventualmente ma tipicamente è cosi).
+- Una volta che hai selezionato le variabili del tuo dataset numeriche che vuoi usare come feature per allenare un tuo modello, è necessario (tipicamente, ma non sempre – dipende dall’algoritmo che si andrà ad usare) a un pre-processing.
+
+
+NB: Esistono diverse tecniche, chiamati SCALER, che hanno come obiettivo quello di scalare/normalizzare le variabili numeriche in un intervallo, a seconda dello Scaler applicato. Ne esistono alcuni semplici fino a soluzioni più complesse o dedicate a casi particolari. 
+
+
+In questa lezione andremo a vedere le principali:
+*************************************************
+
+- MinMaxScaler, che consente di scalare ciasuna variabile numerica in un intervallo specificato dall’utente 
+https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.MinMaxScaler.html
+- StandardScaler, che consente di scalare ciascuna variabile numerica rimuovendo la media e scalando la varianza a 1
+https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.StandardScaler.html#sklearn.preprocessing.StandardScaler
+- MaxAbsScaler, che consente di scalare ciascuna variabile numerica dal massimo valore contenuto in quella colonna
+https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.MaxAbsScaler.html#sklearn.preprocessing.MaxAbsScaler
+- RobustScaler, che consente di scalare ciascuna variabile numerica usando statistiche che sono robuste agli outlier
+https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.RobustScaler.html#sklearn.preprocessing.RobustScaler
+ 
+
+Oltre a queste tecniche di base, ne esistono diverse più complesse chiamate TRANSFORMER :
+
+- QuantileTransformer, che trasforma le feature numeriche usando informazioni sui quantili
+https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.QuantileTransformer.html#sklearn.preprocessing.QuantileTransformer
+- PowerTransformer, che trasforma le feature numeriche rendendole più Gaussian-like
+https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.PowerTransformer.html#sklearn.preprocessing.PowerTransformer
+- Binarizer, che consente di binarizzare i dati in 0 e 1 applicando una soglia
+https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.Binarizer.html#sklearn.preprocessing.Binarizer
+- PolynomialFeatures, che consente di creare feature di interazione polinomiali, a partire dalle variabili numeriche in input
+https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.PolynomialFeatures.html#sklearn.preprocessing.PolynomialFeatures
+ 
+
+Puoi trovare maggiori dettagli qui: https://scikit-learn.org/stable/modules/preprocessing.html#preprocessing
+
+ 
+ - dataset(*) : https://www.kaggle.com/datasets/yasserh/wine-quality-dataset
+
+Il dataset(*) che andremo ad utilizzare in questa lezione è stato preso da Kaggle. Contiene 13 colonne in totale, di cui 11 numeriche, 1 ID e 1 variabile target categorica (che per il momento puoi escludere dalla tua analisi).
+
+ 
+
+L'obiettivo di questo assignment e' quello di :
+
+- Provare diverse tecniche di data pre-processing sulle variabili numeriche. 
+- Quello che ti chiedo inoltre è di provare a scrivere il tuo codice nel miglior modo possibile che tu possa, in quanto questo è molto importante. 
+         a) Scrivere tutto il codice all’interno di celle potrebbe non essere la soluzione ottimale in uno scenario reale. 
+         b) Potresti creare uno script Python contenenti diversi metodi dove ciascun metodo ha un obiettivo fissato e richiamare questo script Python all’interno del notebook Jupyter che andrai a mostrarmi e ad usare come main.
+
+Altro obiettivo è quello di :
+
+-  Cercare di capire quali scaler/transformer e' meglio applicare. 
+
+    NB: Consiglio: guarda la distribuzione delle tue variabili numeriche una ad una e capisci quale scaler/transformer è meglio applicare a seconda delle caratteristiche della variabile.
+
+ 

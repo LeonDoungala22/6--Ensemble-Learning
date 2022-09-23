@@ -1,0 +1,103 @@
+Data Pre-Processing: assignment #4 - How to preprocess numerical and categorical variables together?
+****************************************************************************************************
+
+Durante questa quarta settimana di corso di Data Science, andremo a approfondire come applicare diverse tecniche di data pre-processing su variabili numeriche e categoriche.
+
+ 
+
+/* OBIETTIVO */
+
+L’obiettivo di questo assignment è quello di definire una pipeline di pre-processing che, partendo da un dataset contenente sia variabili numeriche che categoriche:
+
+- Applichi una o più tecniche di data pre-processing sulle sole variabili numeriche, e.g. PowerTransformer seguito da MinMaxScaler
+- Applichi una tecnica di data pre-processing sulle sole variabili categoriche
+- Unisca i due dataset pre-processati, il primo contenente solo le variabili numeriche e il secondo contenente solo le variabili categoriche
+- Usi l’algoritmo DecisionTreeClassifier per classificare le righe del dataset (al momento, non ci interessano le performance del modello, ma tutto ciò che viene prima del modello = data pre-processing)
+ 
+
+NB: ovviamente, puoi partire dai due notebook che abbiamo sviluppato insieme giovedì scorso e estenderlo complicandolo a piacere.
+
+Usare quei due notebook ti consente di partire già avvantaggiato, però se preferisci rifare da zero non ci sono problemi.
+
+ 
+
+Punti extra:
+***********
+
+- Strutturare il codice a metodi
+- Rendere più parametrico possibile il notebook/script, e.g. cambiando solo una variabile che indica quale Scaler applicare sulle variabili numeriche, tutto il resto del codice continua a funzionare come atteso
+- Usare funzionalità avanzate offerte da scikit-learn, come Pipeline, FeatureUnion, ColumnTransformer (maggiori dettagli qui (1)) – questo punto tienilo per ultimo, è tanto più complesso  
+ 
+ Pipeline , https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html
+ FeatureUnion ,https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.FeatureUnion.html#sklearn.pipeline.FeatureUnion
+ ColumnTransformer ,https://scikit-learn.org/stable/modules/generated/sklearn.compose.ColumnTransformer.html#sklearn.compose.ColumnTransformer
+ (1),https://scikit-learn.org/stable/modules/compose.html#combining-estimators
+ 
+
+/* DATASET */
+
+Il dataset che andremo ad utilizzare in questa lezione è stato preso da Kaggle.
+dataset : https://www.kaggle.com/datasets/fedesoriano/stroke-prediction-dataset
+
+
+Questo dataset contiene informazioni sulle persone : 
+
+ - E l’obiettivo è quello di classificare/predirre se una persona sarà affetta o meno da un infarto.
+
+Questo dataset contiene 11 colonne in totale, di cui 3 numeriche, 7 categoriche, 1 ID e 1 variabile target binaria.
+
+ 
+
+/* CONTESTO TEORICO */
+
+
+In ottica di utilizzare o implementare un algoritmo di Machine Learning, è necessario prima di tutto ottenere un dataset dal quale è possiibile estrarre del valore.
+Una volta ottenuto il dataset, è necessario capire i tipi di variabili che contengono il dataset (bisogna effettuare dei cast, eventualmente ma tipicamente è cosi).
+
+ 
+
+A partire da questo dataset è possibile estrarre/generare nuove feature, come per esempio:
+
+- Da una colonna che contiene delle date, è possibile calcolare il giorno, il mese, l’anno, il giorno della settimana, etc. (pandas offre tutto ciò in modo semplice - documentazione)
+- Da più colonne che contengono dei valori numerici, è possibile calcolare differenze, etc. (ovviamente deve avere un senso l’operazione che si fa tra due o più colonne)
+etc.
+ 
+
+Una volta che sono state generate o estratte una lista di nuove feature, oltre alle colonne già presenti nel dataset, è necessario applicare una tecnica di feature selection che ha l’obiettivo di selezionare il sotto-insieme di feature ottimale che permette di massimizzare le performance del modello di ML. Questo step non è semplice, in quanto esistono tantissime combinazioni diverse di feature che bisognerebbe provare affinché si riuscisse a stabilire quale è esattamente il set ottimale di feature.
+
+NB: Questo argomento verrà approfondito tra qualche settimana. Per il momento, non focalizziamoci su questo step di selezione delle feature ottimali.
+
+ 
+
+Una volta che hai selezionato le variabili del tuo dataset che vuoi usare come feature per allenare un tuo modello, è necessario (tipicamente, ma non sempre – dipende dall’algoritmo che si andrà ad usare) applicare una pipeline (= lista di step ordinata) di data pre-processing. Il tipo di pre-processing che bisogna andare a applicare sul dataset dipende da diversi fattori, come:
+
+- Tipologia di dato per ogni colonna, e.g. se è numerica, categorica, data, tempo, etc.
+- Tipologia di algoritmo di ML che si andrà ad applicare
+ 
+
+/* TECNOLOGIA */
+
+ 
+
+Per quanto riguarda le variabili numeriche, esistono in scikit-learn diverse tecniche già implementate.
+
+Esistono diverse tecniche, chiamati Scaler, che hanno come obiettivo quello di scalare/normalizzare le variabili numeriche in un intervallo, a seconda dello Scaler applicato. Ne esistono alcuni semplici fino a soluzioni più complesse o dedicate a casi particolari. In questa lezione andremo a vedere le principali:
+
+- MinMaxScaler, che consente di scalare ciasuna variabile numerica in un intervallo specificato dall’utente
+- StandardScaler, che consente di scalare ciascuna variabile numerica rimuovendo la media e scalando la varianza a 1
+- MaxAbsScaler, che consente di scalare ciascuna variabile numerica dal massimo valore contenuto in quella colonna
+- RobustScaler, che consente di scalare ciascuna variabile numerica usando statistiche che sono robuste agli outlier
+
+Oltre a queste tecniche di base, ne esistono diverse più complesse chiamate Transformer:
+
+- QuantileTransformer, che trasforma le feature numeriche usando informazioni sui quantili
+- PowerTransformer, che trasforma le feature numeriche rendendole più Gaussian-like
+- Binarizer, che consente di binarizzare i dati in 0 e 1 applicando una soglia
+- PolynomialFeatures, che consente di creare feature di interazione polinomiali, a partire dalle variabili numeriche in input
+ 
+
+Per quanto riguarda le variabili categoriche, esistono in scikit-learn diverse tecniche già implementate. In questa lezione andremo a vedere le principali:
+
+- OneHotEncoder, che consente di convertire i valori di tipo stringa in valori numerici creando N colonne aggiuntive
+- OrdinalEncoder, che consente di convertire i valori di tipo stringa in valori numerici senza introdurre colonne aggiuntive
+ 
